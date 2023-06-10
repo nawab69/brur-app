@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { Portal } from '@gorhom/portal'
 import { Sheet } from '../../components/sheet'
 import { ChangePassword } from './sheets'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch } from '../../redux/store'
+import { logout, selectCurrentUser, unsetCredentialLocally } from '../../redux/slices/auth/authSlice'
+import { routes } from '../../constant'
 const UpdateProfile = ChangePassword;
 
 interface cardProps {
@@ -32,12 +36,14 @@ const list: cardProps[] = [
 ]
 
 export default function Menu({ navigation }: { navigation: any }) {
-
+    const dispatch = useDispatch<AppDispatch>()
+    const user = useSelector(selectCurrentUser)
 
     const [state, setState] = useState({
         [constant.CHANGE_PASSWORD]: false,
         [constant.UPDATE_PROFILE]: false
     })
+
 
 
     const _toggle = (key: string) => {
@@ -52,7 +58,9 @@ export default function Menu({ navigation }: { navigation: any }) {
     }
 
     const _logout = () => {
-
+        dispatch(unsetCredentialLocally())
+        dispatch(logout())
+        navigation.navigate(routes.LOGIN)
     }
     return (
         <>
@@ -62,8 +70,8 @@ export default function Menu({ navigation }: { navigation: any }) {
                         <Image source={require('../../assets/images/profile.png')} className="h-24 w-24 rounded-xl" />
                     </View>
                     <View className='my-3'>
-                        <Text className="text-black text-lg font-['Inter-Medium'] mx-auto">{"Nawab"}</Text>
-                        <Text className="text-slate-400 text-xs font-['Inter-Medium'] mx-auto">{"cse1905002brur@gmail.com"}</Text>
+                        <Text className="text-black text-lg font-['Inter-Medium'] mx-auto text-center mb-2">{user?.name}</Text>
+                        <Text className="text-slate-400 text-xs font-['Inter-Medium'] mx-auto">{user?.email}</Text>
                     </View>
                 </View>
                 <View className="bg-white mt-auto rounded-t-3xl px-5 py-8">

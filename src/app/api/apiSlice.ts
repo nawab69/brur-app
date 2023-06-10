@@ -4,8 +4,7 @@ import {
   setCredentialsLocally,
 } from '../../redux/slices/auth/authSlice';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-const baseUrl = 'http://192.168.68.115:4000/api/';
+import {baseUrl} from '../../constant';
 
 const baseQuery = fetchBaseQuery({
   baseUrl: baseUrl,

@@ -1,18 +1,22 @@
 import { View, Text, Image } from 'react-native'
 import React from 'react'
 import { ColorizedBackground } from '../components/colorized-background';
+import { useSelector } from 'react-redux';
+import { selectCurrentUser } from '../redux/slices/auth/authSlice';
 
 export const Profile = () => {
+
+    const user = useSelector(selectCurrentUser);
     const profileData = {
         profilePicture: require('../assets/images/profile.png'),
-        name: 'Nawab Kibria',
+        name: user?.name,
         departmentName: 'Computer Science and Engineering',
         year: '3rd',
         semester: '1st',
         session: '2019-2020',
-        id: '1905002',
+        id: user?.studentId,
         registrationNo: '000012730',
-        email: 'cse1905002brur@gmail.com',
+        email: user?.email,
     };
     return (
         <ColorizedBackground>
@@ -22,7 +26,7 @@ export const Profile = () => {
                         source={profileData.profilePicture}
                         className="w-32 h-32 mb-4 rounded-full border-4 border-white"
                     />
-                    <Text className="text-2xl font-bold mb-2">{profileData.name}</Text>
+                    <Text className="text-2xl font-bold mb-2 text-center">{profileData.name}</Text>
                     <Text className="text-lg font-medium mb-4">
                         {profileData.departmentName}
                     </Text>

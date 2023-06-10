@@ -6,6 +6,7 @@ import { Formik } from "formik";
 import * as yup from 'yup'
 import { useToasts } from "../utils/useToasts";
 import { useRegisterMutation } from "../redux/slices/auth/authApiSlice";
+import { Button } from "../components/button";
 
 const schema = yup.object({
     name: yup.string().required(),
@@ -139,9 +140,7 @@ export const Register = ({
                                 }
                             </View>
 
-                            <TouchableOpacity onPress={handleSubmit} className="bg-green-500 px-4 py-2 rounded">
-                                <Text className="text-white text-center font-semibold">Sign Up</Text>
-                            </TouchableOpacity>
+                            <Button disabled={isLoading} onPress={handleSubmit}>Sign Up</Button>
 
 
                             <View className="justify-center items-center mt-6">

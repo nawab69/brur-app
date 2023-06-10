@@ -11,3 +11,6 @@ export const routes = {
   BOTTOM_TAB: 'BOTTOM_TAB',
   HISTORY: 'HISTORY',
 };
+
+export const baseUrl = 'http://172.20.10.7:4000/api/';
+export const pdfBaseUrl = 'http://172.20.10.7:4000/';

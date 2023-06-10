@@ -10,16 +10,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React, { useState } from 'react';
 import {
-  Image,
-  SafeAreaView,
   StatusBar,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 import { routes } from './src/constant';
 import { Routes } from './src/screens';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
@@ -44,9 +36,9 @@ function App(): JSX.Element {
   }
 
   return (
-    <PortalProvider>
-      <Provider store={store}>
-        <ToastProvider>
+    <Provider store={store}>
+      <ToastProvider>
+        <PortalProvider>
           <GestureHandlerRootView className="flex-1">
             <StatusBar translucent backgroundColor="transparent" barStyle={'dark-content'} />
             <NavigationContainer>
@@ -57,9 +49,9 @@ function App(): JSX.Element {
               </Stack.Navigator>
             </NavigationContainer>
           </GestureHandlerRootView>
-        </ToastProvider>
-      </Provider>
-    </PortalProvider>
+        </PortalProvider>
+      </ToastProvider>
+    </Provider>
   );
 }
 

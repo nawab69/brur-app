@@ -1,7 +1,7 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { RootState } from '../../store';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
+import {RootState} from '../../store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { State } from 'react-native-gesture-handler';
+import {State} from 'react-native-gesture-handler';
 
 interface IAuthState {
   loading: boolean;
@@ -13,6 +13,7 @@ interface IAuthState {
     roles?: string[];
     isVerified?: boolean;
     is2FAEnabled?: boolean;
+    studentId?: string;
   } | null;
   token?: string | null;
   refreshToken?: string | null;
@@ -44,7 +45,7 @@ export const fetchCurrentCredentials = createAsyncThunk(
     const user = await AsyncStorage.getItem('userInfo');
     const token = await AsyncStorage.getItem('token');
     const refreshToken = await AsyncStorage.getItem('refreshToken');
-    console.log({ user, token, refreshToken });
+    console.log({user, token, refreshToken});
     return {
       user: JSON.parse(user!),
       token: JSON.parse(token!),
@@ -91,21 +92,22 @@ const authSlice = createSlice({
     });
 
     builder.addCase(setCredentialsLocally.pending, (state, action) => {
-      state.loading = true
+      state.loading = true;
     });
     builder.addCase(setCredentialsLocally.fulfilled, (state, action) => {
-      state.loading = false
+      state.loading = false;
     });
     builder.addCase(setCredentialsLocally.rejected, (state, action) => {
-      state.loading = false
+      state.loading = false;
     });
   },
 });
 
-export const { setCredentials, logout } = authSlice.actions;
+export const {setCredentials, logout} = authSlice.actions;
 
 export default authSlice.reducer;
 
 export const selectCurrentUser = (state: RootState) => state.auth.user;
 export const selectCurrentToken = (state: RootState) => state.auth.token;
-export const selectCurrentRefreshToken = (state: RootState) => state.auth.refreshToken
+export const selectCurrentRefreshToken = (state: RootState) =>
+  state.auth.refreshToken;

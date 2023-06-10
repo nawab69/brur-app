@@ -38,7 +38,7 @@ export const Login = ({ navigation }: { navigation: any }) => {
 
             await dispatch(setCredentials({ token, refreshToken, user }))
             await dispatch(setCredentialsLocally({ token, refreshToken, user }))
-            toast.success("Log in Successfull")
+            toast.success("Log in Successful")
             navigation.navigate(routes.BOTTOM_TAB)
         } catch (error: any) {
             console.log(error)
@@ -101,38 +101,43 @@ export const Login = ({ navigation }: { navigation: any }) => {
                         <View className="flex-1 p-6">
                             <Text className="text-2xl font-bold text-gray-700 mb-6">Sign In</Text>
                             <Text className="text-gray-500 mb-8">Enter your email and password!</Text>
-                            <TextInput
-                                onChangeText={handleChange('email')}
-                                onBlur={handleBlur('email')}
-                                value={values.email}
-                                placeholder="Email"
-                                keyboardType="email-address"
-                                className="bg-gray-100 px-4 py-2 rounded mb-4"
-                            />
-                            <TextInput
-                                secureTextEntry
-                                autoCorrect={false}
-                                onChangeText={handleChange('password')}
-                                onBlur={handleBlur('password')}
-                                value={values.password}
-                                placeholder="Password"
-                                className="bg-gray-100 px-4 py-2 rounded mb-8"
-                            />
+                            <View className="mb-4">
+                                <TextInput
+                                    onChangeText={handleChange('email')}
+                                    onBlur={handleBlur('email')}
+                                    value={values.email}
+                                    placeholder="Email"
+                                    keyboardType="email-address"
+                                    className="bg-gray-100 px-4 py-2 rounded"
+                                />
+                                {
+                                    errors.email && <Text className="font-['Inter-Medium'] text-red-500 text-xs px-2 capitalize mt-1">{errors.email}</Text>
+                                }
+                            </View>
+                            <View className="mb-4">
+                                <TextInput
+                                    secureTextEntry
+                                    autoCorrect={false}
+                                    onChangeText={handleChange('password')}
+                                    onBlur={handleBlur('password')}
+                                    value={values.password}
+                                    placeholder="Password"
+                                    className="bg-gray-100 px-4 py-2 rounded"
+                                />
+                                {
+                                    errors.password && <Text className="font-['Inter-Medium'] text-red-500 text-xs px-2 capitalize mt-1">{errors.password}</Text>
+                                }
+                            </View>
                             <Button disabled={isLoading} onPress={handleSubmit}>Sign in</Button>
-                            {/* <TouchableOpacity onPress={_login} className="bg-green-500 px-4 py-2 rounded">
-                                <Text className="text-white text-center font-semibold">Sign In</Text>
-                            </TouchableOpacity> */}
                             <View className="justify-center items-center mt-6">
                                 <Text className="text-gray-500">Don't have an account?
                                 </Text>
                                 <TouchableOpacity className="mt-2" onPress={() => {
                                     // Navigate to register screen
                                     navigation.navigate(routes.REGISTER);
-
                                 }}>
                                     <Text className="font-semibold">Sign Up</Text>
                                 </TouchableOpacity>
-
                             </View>
                         </View>)
                     }

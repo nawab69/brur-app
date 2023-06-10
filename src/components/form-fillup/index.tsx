@@ -6,6 +6,12 @@ import { Button } from "../button";
 import { Search } from "../search";
 import { useState } from "react";
 import { Image } from "react-native";
+import axios from "axios";
+import { baseUrl, pdfBaseUrl } from "../../constant";
+import { Linking } from "react-native";
+import { useToasts } from "../../utils/useToasts";
+import { useSelector } from "react-redux";
+import { selectCurrentToken } from "../../redux/slices/auth/authSlice";
 
 enum FormFillUpType {
     Regular = 'Regular',
@@ -87,10 +93,85 @@ export function FormFillUp({ close }: { close?: any }) {
             setIsNewCourse(false)
         }
     };
+
     const removeCourse = (index: number) => {
         console.log(index)
         setImprovementCourses(improvementCourses.filter((_, i) => i !== index));
     };
+
+    const [loading, setLoading] = useState<boolean>(false)
+
+    const toast = useToasts()
+
+    const token = useSelector(selectCurrentToken);
+
+    console.log()
+    const [data, setData] = useState<any>(null)
+
+    const generatePaySlip = async () => {
+        if (loading) return
+
+        setLoading(true)
+
+
+        if (!type) {
+            toast.dismiss()
+            toast.error('Please select type')
+            setLoading(false)
+            return
+        }
+
+        if (!year) {
+            toast.dismiss()
+            toast.error('Please select year')
+            setLoading(false)
+            return
+        }
+
+        if (!semester) {
+            toast.dismiss()
+            toast.error('Please select semester')
+            setLoading(false)
+            return
+        }
+
+        if (!examYear) {
+            toast.dismiss()
+            toast.error('Please select exam year')
+            setLoading(false)
+            return
+        }
+
+        console.log(type, year, semester, examYear)
+
+        try {
+            const { data } = await axios.post(`${baseUrl}forms`, {
+                type: type,
+                year: year,
+                semester: semester,
+                examYear: examYear
+            }, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+
+            if (data) {
+                toast.dismiss()
+                console.log("URL", `${pdfBaseUrl}${data.file}`)
+                Linking.openURL(`${pdfBaseUrl}${data.file}`)
+                toast.success("Form Fillup Payslip Generated Successfully")
+            } else {
+                throw new Error('Something went wrong')
+            }
+        } catch (e) {
+            console.log(e)
+            toast.dismiss()
+            toast.error('Something went wrong')
+        }
+
+        setLoading(false)
+    }
 
     return (
         <KeyboardAvoidingView>
@@ -187,7 +268,7 @@ export function FormFillUp({ close }: { close?: any }) {
 
 
                 {
-                    (type === FormFillUpType.Improvement && improvementCourses.length > 0) || type === FormFillUpType.Regular ? <Button disabled={false} onPress={() => { }}>Generate Pay Slip</Button> : (<></>)
+                    (type === FormFillUpType.Improvement && improvementCourses.length > 0) || type === FormFillUpType.Regular ? <Button disabled={loading} onPress={generatePaySlip}>Generate Pay Slip</Button> : (<></>)
                 }
 
             </View>
